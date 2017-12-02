@@ -15,7 +15,5 @@ class MainActivity : Activity() {
         btnThreads.setOnClickListener { navigateTo(ThreadsActivity::class.java) }
     }
 
-    private fun navigateTo(activity: Class<ThreadsActivity>) {
-        startActivity(Intent(this, activity))
-    }
+    private fun navigateTo(activity: Class<ThreadsActivity>) = startActivity(Intent(this, activity))
 }
