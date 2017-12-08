@@ -1,13 +1,14 @@
 package com.fernandocejas.sample.threading.data
 
+import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
-class Pages(private val start: Int, private val end: Int) : Iterable<Page> {
+class Pages(private val start: Int, private val end: Int, private val file: File) : Iterable<Page> {
 
     override fun iterator() = PageIterator()
 
     inner class PageIterator : Iterator<Page> {
-        private val xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(Source().data())
+        private val xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
         private val pagesList = xmlDoc.getElementsByTagName("page")
 
         private var cursor = start

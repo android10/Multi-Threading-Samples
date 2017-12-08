@@ -2,7 +2,7 @@ package com.fernandocejas.sample.threading.data
 
 import java.text.BreakIterator
 
-class Words(private val text: String) : Iterable<String> {
+class Words(private val text: String = "This is defensive test") : Iterable<String> {
 
     override fun iterator() = WordIterator()
 
@@ -10,21 +10,24 @@ class Words(private val text: String) : Iterable<String> {
         private val wordBoundary = BreakIterator.getWordInstance()
 
         private var start: Int
-        private var end: Int
+        private var next: Int
 
         init {
             wordBoundary.setText(text)
             start = wordBoundary.first()
-            end = wordBoundary.next()
+            next = wordBoundary.next()
         }
 
-        override fun hasNext() = throw UnsupportedOperationException()
+        override fun hasNext() = next != BreakIterator.DONE
 
         override fun next(): String {
-            val string = text.substring(start, end)
-            start = end
-            end = wordBoundary.next()
-            return string
+            if (hasNext()) {
+                val string = text.substring(start, next)
+                start = next
+                next = wordBoundary.next()
+                return string
+            }
+            throw NoSuchElementException()
         }
     }
 }

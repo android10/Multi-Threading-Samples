@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Android Threading Samples</string>
     <string name="description">This is a simple example to parallelize tasks using the following different options available on the android platform.
-    The code consists of parsing and XML file containing Wikipedia Pages and count the occurrence of each word in each page. Then at the end gather all the information and merge it.
+    The code consists of parsing and XML file containing Wikipedia Pages and count the occurrence of each word in each page. Then at the next gather all the information and merge it.
     The idea is also to display, time and memory consumed when doing it both sequentially and in parallel.</string>
 
     <string name="textRunSample">Run</string>
