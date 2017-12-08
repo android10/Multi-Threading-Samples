@@ -7,12 +7,12 @@ import com.fernandocejas.sample.threading.data.Words
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-class WordCount {
-    private val LOG_TAG = WordCount::class.java.canonicalName
+class SequentialWordCount {
+    private val LOG_TAG = SequentialWordCount::class.java.canonicalName
 
     private val counts: HashMap<String, Int?> = HashMap()
 
-    fun runSequentially() {
+    fun run() {
         val startTime = System.currentTimeMillis()
 
         val observable = Observable.fromCallable {

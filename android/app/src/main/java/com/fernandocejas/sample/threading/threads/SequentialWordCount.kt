@@ -6,12 +6,12 @@ import com.fernandocejas.sample.threading.data.Source
 import com.fernandocejas.sample.threading.data.Words
 import kotlin.system.measureTimeMillis
 
-class WordCount {
-    private val LOG_TAG = WordCount::class.java.canonicalName
+class SequentialWordCount {
+    private val LOG_TAG = SequentialWordCount::class.java.canonicalName
 
     private val counts: HashMap<String, Int?> = HashMap()
 
-    fun runSequentially() {
+    fun run() {
         val time = measureTimeMillis {
             Thread {
                 val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
