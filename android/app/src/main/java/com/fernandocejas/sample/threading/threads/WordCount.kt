@@ -4,47 +4,32 @@ import android.util.Log
 import com.fernandocejas.sample.threading.data.Pages
 import com.fernandocejas.sample.threading.data.Source
 import com.fernandocejas.sample.threading.data.Words
+import kotlin.system.measureTimeMillis
 
 class WordCount {
-    private val counts: HashMap<String, Int> = HashMap()
+    private val LOG_TAG = WordCount::class.java.canonicalName
+
+    private val counts: HashMap<String, Int?> = HashMap()
 
     fun runSequentially() {
-        val startTime = System.currentTimeMillis()
-        var endTime = System.currentTimeMillis()
+        val time = measureTimeMillis {
+            Thread {
+                val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+                pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
-        val myThread = Thread {
-            val pages01 = Pages(0, 5000, Source().wikiPages01())
-            for (page in pages01) {
-                val words = Words(page.text)
-                for (word in words) {
-                    countWord(word)
-                }
-            }
-
-            val pages02 = Pages(0, 5000, Source().wikiPages02())
-            for (page in pages02) {
-                val words = Words(page.text)
-                for (word in words) {
-                    countWord(word)
-                }
-            }
-
-            endTime = System.currentTimeMillis()
+                val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+                pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
+            }.run()
         }
 
-        myThread.run()
-
-        Log.d("WordCount", "Number of elements: " + counts.size)
-        Log.d("WordCount", "Time: " + (endTime - startTime) + "ms")
+        Log.d(LOG_TAG, "Number of elements: ${counts.size}")
+        Log.d(LOG_TAG, "Execution Time: $time ms")
     }
 
     private fun countWord(word: String) {
-        val currentCount = counts[word]
-
-        if (currentCount == null) {
-            counts[word] = 1
-        } else {
-            counts[word] = currentCount + 1
+        when(counts.containsKey(word)) {
+            true -> counts[word] = counts[word]?.plus(1)
+            false -> counts[word] = 1
         }
     }
 }
