@@ -4,41 +4,40 @@ import android.util.Log
 import com.fernandocejas.sample.threading.data.Pages
 import com.fernandocejas.sample.threading.data.Source
 import com.fernandocejas.sample.threading.data.Words
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.newFixedThreadPoolContext
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.system.measureTimeMillis
 
-class BetterWordCount {
-    private val counts: ConcurrentHashMap<String, Int?> = ConcurrentHashMap()
-
+class BetterWordCount(source: Source) {
     private val LOG_TAG = BetterWordCount::class.java.canonicalName
 
+    private val filePagesOne = source.wikiPagesBatchOne()
+    private val filePagesTwo = source.wikiPagesBatchTwo()
+
     fun run() {
-        val poolContext = newFixedThreadPoolContext(2, "ThreadPool")
-        launch(poolContext) {
+        launch(CommonPool) {
             val time = measureTimeMillis {
-                val one = async(poolContext) { counterPages1() }
-                val two = async(poolContext) { counterPages2() }
-                one.await()
-                two.await()
+                val one = async(CommonPool) { counter(0.rangeTo(749), filePagesOne) }
+                val two = async(CommonPool) { counter(750.rangeTo(1500), filePagesOne) }
+                val three = async(CommonPool) { counter(0.rangeTo(749), filePagesTwo) }
+                val four = async(CommonPool) { counter(750.rangeTo(1500), filePagesTwo) }
+                one.await(); two.await(); three.await(); four.await()
             }
             logData(time)
         }
     }
 
-    private suspend fun counterPages1() {
-        val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
-        pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
+    private suspend fun counter(range: IntRange, file: File): HashMap<String, Int?> {
+        val counts: HashMap<String, Int?> = HashMap()
+        val pagesOne = Pages(range.start, range.endInclusive, file)
+        pagesOne.forEach { page -> Words(page.text).forEach { countWord(counts, it) } }
+        return counts
     }
 
-    private suspend fun counterPages2() {
-        val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
-        pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
-    }
-
-    private fun countWord(word: String) {
+    private fun countWord(counts: HashMap<String, Int?>, word: String) {
         when(counts.containsKey(word)) {
             true -> counts[word] = counts[word]?.plus(1)
             false -> counts[word] = 1
@@ -46,7 +45,6 @@ class BetterWordCount {
     }
 
     private fun logData(time: Long) {
-        Log.d(LOG_TAG, "Number of elements: ${counts.size}")
         Log.d(LOG_TAG, "Execution Time: $time ms")
     }
 }
