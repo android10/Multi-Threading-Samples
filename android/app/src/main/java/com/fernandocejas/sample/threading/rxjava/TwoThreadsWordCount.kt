@@ -43,5 +43,4 @@ class TwoThreadsWordCount {
         Log.d(LOG_TAG, "Number of elements: ${counts.size}")
         Log.d(LOG_TAG, "Execution Time: $time ms")
     }
-
 }
