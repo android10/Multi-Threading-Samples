@@ -14,12 +14,12 @@ class TwoThreadsWordCount {
 
     fun run() {
         val threadOne = Thread {
-            val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+            val pagesOne = Pages(0, 700, Source().wikiPagesBatchOne())
             pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
         }
 
         val threadTwo = Thread {
-            val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+            val pagesTwo = Pages(0, 700, Source().wikiPagesBatchTwo())
             pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
         }
 

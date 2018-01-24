@@ -21,10 +21,10 @@ class SequentialWordCount {
     }
 
     private suspend fun counter() {
-        val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+        val pagesOne = Pages(0, 700, Source().wikiPagesBatchOne())
         pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
-        val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+        val pagesTwo = Pages(0, 700, Source().wikiPagesBatchTwo())
         pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
     }
 

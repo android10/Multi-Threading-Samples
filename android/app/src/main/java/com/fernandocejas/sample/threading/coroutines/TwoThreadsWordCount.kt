@@ -29,12 +29,12 @@ class TwoThreadsWordCount {
     }
 
     private suspend fun counterPages1() {
-        val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+        val pagesOne = Pages(0, 700, Source().wikiPagesBatchOne())
         pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
     }
 
     private suspend fun counterPages2() {
-        val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+        val pagesTwo = Pages(0, 700, Source().wikiPagesBatchTwo())
         pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
     }
 

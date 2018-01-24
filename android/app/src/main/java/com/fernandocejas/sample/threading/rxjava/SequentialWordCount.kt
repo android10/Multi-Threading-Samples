@@ -19,13 +19,13 @@ class SequentialWordCount {
         val observable = Observable.fromCallable {
             var pagesOne = Pages.empty()
             val pagesOneCreationTime = measureTimeMillis {
-                pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+                pagesOne = Pages(0, 700, Source().wikiPagesBatchOne())
             }
             pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
             var pagesTwo = Pages.empty()
             val pagesTwoCreationTime = measureTimeMillis {
-                pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+                pagesTwo = Pages(0, 700, Source().wikiPagesBatchTwo())
             }
             pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
