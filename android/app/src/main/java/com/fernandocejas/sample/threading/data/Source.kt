@@ -4,6 +4,7 @@ import android.os.Environment
 import java.io.File
 
 class Source {
+    //TODO: refactor to not be hardcoded
     private val FILES_DIRECTORY = "/fernandocejas/"
     private val FILE_NAME_WIKI_PAGES_01 = "wiki_pages_big_01.xml"
     private val FILE_NAME_WIKI_PAGES_02 = "wiki_pages_big_02.xml"

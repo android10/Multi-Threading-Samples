@@ -26,7 +26,7 @@ class Pages(private val start: Int, private val end: Int, private val file: File
                         page = Page(title, text)
                     }
                 } catch (exception: Exception) {
-                    //TODO: this code must be refactored in order to properly handle exceptions
+                    //TODO: handle exceptions properly
                 } finally {
                     cursor++
                     return page
