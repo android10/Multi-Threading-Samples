@@ -7,6 +7,8 @@ import javax.xml.parsers.DocumentBuilderFactory
 class Pages(private val start: Int, private val end: Int, private val file: File) : Iterable<Page> {
     private val LOG_TAG = Pages::class.java.canonicalName
 
+    var elementsProcessed = 0
+
     companion object {
         fun empty() = Pages(0, 0, File(""))
     }
@@ -23,6 +25,7 @@ class Pages(private val start: Int, private val end: Int, private val file: File
         private var startTime: Long = 0
         init {
             startTime = System.currentTimeMillis()
+            elementsProcessed = 0
         }
 
         override fun hasNext(): Boolean {
@@ -43,6 +46,7 @@ class Pages(private val start: Int, private val end: Int, private val file: File
                         val title = node.childNodes.item(1).textContent
                         val text = node.childNodes.item(7).childNodes.item(15).textContent
                         page = Page(title, text)
+                        elementsProcessed++
                     }
                 } catch (exception: Exception) {
                     //TODO: handle exceptions properly
