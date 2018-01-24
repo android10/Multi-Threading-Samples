@@ -8,7 +8,6 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.system.measureTimeMillis
 
 class BetterWordCount(source: Source) {
