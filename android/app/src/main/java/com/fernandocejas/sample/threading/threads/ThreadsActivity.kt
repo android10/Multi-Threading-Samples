@@ -11,7 +11,7 @@ class ThreadsActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_threads)
-        btnRun.setOnClickListener { rxJavaSequentialWordCount() }
+        btnRun.setOnClickListener { threadsTwoThreadsWordCount() }
     }
 
     //Threads and Locks Examples

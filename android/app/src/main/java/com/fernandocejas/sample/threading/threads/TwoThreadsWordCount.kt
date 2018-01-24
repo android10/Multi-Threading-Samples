@@ -4,26 +4,30 @@ import android.util.Log
 import com.fernandocejas.sample.threading.data.Pages
 import com.fernandocejas.sample.threading.data.Source
 import com.fernandocejas.sample.threading.data.Words
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.system.measureTimeMillis
 
 class TwoThreadsWordCount {
     private val LOG_TAG = TwoThreadsWordCount::class.java.canonicalName
 
-    private val counts: HashMap<String, Int?> = HashMap()
+    private val counts: ConcurrentHashMap<String, Int?> = ConcurrentHashMap()
 
     fun run() {
-        val time = measureTimeMillis {
-            val one = Thread {
-                val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
-                pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
-            }
-            val two = Thread {
-                val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
-                pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
-            }
+        val threadOne = Thread {
+            val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+            pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
+        }
 
-            one.start(); one.join()
-            two.start(); two.join()
+        val threadTwo = Thread {
+            val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+            pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
+        }
+
+        val time = measureTimeMillis {
+            threadOne.start()
+            threadTwo.start()
+            threadOne.join()
+            threadTwo.join()
         }
 
         Log.d(LOG_TAG, "Number of elements: ${counts.size}")
