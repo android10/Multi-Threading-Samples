@@ -1,9 +1,11 @@
 package com.fernandocejas.sample.threading.data
 
+import android.util.Log
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 class Pages(private val start: Int, private val end: Int, private val file: File) : Iterable<Page> {
+    private val LOG_TAG = Pages::class.java.canonicalName
 
     companion object {
         fun empty() = Pages(0, 0, File(""))
@@ -17,7 +19,20 @@ class Pages(private val start: Int, private val end: Int, private val file: File
 
         private var cursor = start
 
-        override fun hasNext() = cursor < end
+        //For performance measurement
+        private var startTime: Long = 0
+        init {
+            startTime = System.currentTimeMillis()
+        }
+
+        override fun hasNext(): Boolean {
+            val hasNext = cursor < end
+            if (!hasNext) {
+                val totalExecutionTime = System.currentTimeMillis().minus(startTime)
+                Log.d(LOG_TAG, "Parsing XML Execution Time: $totalExecutionTime ms")
+            }
+            return hasNext
+        }
 
         override fun next(): Page {
             if (hasNext()) {
