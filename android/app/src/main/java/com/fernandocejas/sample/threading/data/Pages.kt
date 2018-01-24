@@ -1,13 +1,17 @@
 package com.fernandocejas.sample.threading.data
 
 import android.util.Log
+import org.w3c.dom.Document
+import org.w3c.dom.NodeList
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 class Pages(private val start: Int, private val end: Int, private val file: File) : Iterable<Page> {
     private val LOG_TAG = Pages::class.java.canonicalName
 
-    var elementsProcessed = 0
+    var elementsProcessed: Int = 0
+    var fileParsingTime: Long = 0
+    var elementsProcessedTime: Long = 0
 
     companion object {
         fun empty() = Pages(0, 0, File(""))
@@ -16,29 +20,34 @@ class Pages(private val start: Int, private val end: Int, private val file: File
     override fun iterator() = PageIterator()
 
     inner class PageIterator : Iterator<Page> {
-        private val xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
-        private val pagesList = xmlDoc.getElementsByTagName("page")
+        private val xmlDoc: Document
+        private val pagesList: NodeList
 
         private var cursor = start
 
-        //For performance measurement
-        private var startTime: Long = 0
         init {
-            startTime = System.currentTimeMillis()
             elementsProcessed = 0
+            elementsProcessedTime = 0
+
+            val fileParsingStartTime = System.currentTimeMillis()
+            xmlDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
+            pagesList = xmlDoc.getElementsByTagName("page")
+            fileParsingTime = System.currentTimeMillis().minus(fileParsingStartTime)
         }
 
         override fun hasNext(): Boolean {
             val hasNext = cursor < end
             if (!hasNext) {
-                val totalExecutionTime = System.currentTimeMillis().minus(startTime)
-                Log.d(LOG_TAG, "Parsing XML Execution Time: $totalExecutionTime ms")
+                Log.d(LOG_TAG, "Time Parsing XML File: $fileParsingTime ms")
+                Log.d(LOG_TAG, "Time Processing XML Node Elements: $elementsProcessedTime ms")
+                Log.d(LOG_TAG, "Total Time: ${fileParsingTime.plus(elementsProcessedTime)} ms")
             }
             return hasNext
         }
 
         override fun next(): Page {
             if (hasNext()) {
+                val startParsingNodeTime = System.currentTimeMillis()
                 var page = Page("", "")
                 try {
                     val node = pagesList.item(cursor)
@@ -52,6 +61,7 @@ class Pages(private val start: Int, private val end: Int, private val file: File
                     //TODO: handle exceptions properly
                 } finally {
                     cursor++
+                    elementsProcessedTime = elementsProcessedTime.plus(System.currentTimeMillis().minus(startParsingNodeTime))
                     return page
                 }
             }
