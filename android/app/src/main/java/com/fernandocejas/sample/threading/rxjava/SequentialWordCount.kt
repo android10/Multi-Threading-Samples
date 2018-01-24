@@ -18,14 +18,18 @@ class SequentialWordCount {
 
         val observable = Observable.fromCallable {
             var pagesOne = Pages.empty()
-            val pagesOneExecutionTime = measureTimeMillis { pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne()) }
+            val pagesOneCreationTime = measureTimeMillis {
+                pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+            }
             pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
             var pagesTwo = Pages.empty()
-            val pagesTwoExecutionTime = measureTimeMillis { pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo()) }
+            val pagesTwoCreationTime = measureTimeMillis {
+                pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+            }
             pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
-            logFileParsingTime(pagesOneExecutionTime, pagesTwoExecutionTime)
+            logPagesCreationTime(pagesOneCreationTime, pagesTwoCreationTime)
         }
 
         observable
@@ -41,10 +45,10 @@ class SequentialWordCount {
         }
     }
 
-    private fun logFileParsingTime(timePagesOne: Long, timePagesTwo: Long) {
-        Log.d(LOG_TAG, "Parsing XML File One: $timePagesOne ms")
-        Log.d(LOG_TAG, "Parsing XML File Two: $timePagesTwo ms")
-        Log.d(LOG_TAG, "Total Execution XML Parsing: ${timePagesOne.plus(timePagesTwo)} ms")
+    private fun logPagesCreationTime(timePagesOne: Long, timePagesTwo: Long) {
+        Log.d(LOG_TAG, "PageOne creation time: $timePagesOne ms")
+        Log.d(LOG_TAG, "PageOne creation time: $timePagesTwo ms")
+        Log.d(LOG_TAG, "Total Execution Pages Creation: ${timePagesOne.plus(timePagesTwo)} ms")
     }
 
     private fun logExecutionData(time: Long) {
