@@ -32,8 +32,8 @@ class BetterWordCount(source: Source) {
 
     private suspend fun counter(range: IntRange, file: File): HashMap<String, Int?> {
         val counts: HashMap<String, Int?> = HashMap()
-        val pagesOne = Pages(range.start, range.endInclusive, file)
-        pagesOne.forEach { page -> Words(page.text).forEach { countWord(counts, it) } }
+        val pages = Pages(range.start, range.endInclusive, file)
+        pages.forEach { page -> Words(page.text).forEach { countWord(counts, it) } }
         return counts
     }
 
