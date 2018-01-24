@@ -5,6 +5,10 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class Pages(private val start: Int, private val end: Int, private val file: File) : Iterable<Page> {
 
+    companion object {
+        fun empty() = Pages(0, 0, File(""))
+    }
+
     override fun iterator() = PageIterator()
 
     inner class PageIterator : Iterator<Page> {

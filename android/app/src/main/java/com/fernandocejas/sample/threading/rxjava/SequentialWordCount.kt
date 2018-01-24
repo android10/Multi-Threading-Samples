@@ -6,6 +6,7 @@ import com.fernandocejas.sample.threading.data.Source
 import com.fernandocejas.sample.threading.data.Words
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import kotlin.system.measureTimeMillis
 
 class SequentialWordCount {
     private val LOG_TAG = SequentialWordCount::class.java.canonicalName
@@ -16,15 +17,19 @@ class SequentialWordCount {
         val startTime = System.currentTimeMillis()
 
         val observable = Observable.fromCallable {
-            val pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne())
+            var pagesOne = Pages.empty()
+            val pagesOneExecutionTime = measureTimeMillis { pagesOne = Pages(0, 5000, Source().wikiPagesBatchOne()) }
             pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
 
-            val pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo())
+            var pagesTwo = Pages.empty()
+            val pagesTwoExecutionTime = measureTimeMillis { pagesTwo = Pages(0, 5000, Source().wikiPagesBatchTwo()) }
             pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
+
+            logFileParsingTime(pagesOneExecutionTime, pagesTwoExecutionTime)
         }
 
         observable
-                .doOnComplete { logData(System.currentTimeMillis() - startTime) }
+                .doOnComplete { logExecutionData(System.currentTimeMillis() - startTime) }
                 .subscribeOn(Schedulers.single())
                 .subscribe()
     }
@@ -36,7 +41,13 @@ class SequentialWordCount {
         }
     }
 
-    private fun logData(time: Long) {
+    private fun logFileParsingTime(timePagesOne: Long, timePagesTwo: Long) {
+        Log.d(LOG_TAG, "Parsing XML File One: $timePagesOne ms")
+        Log.d(LOG_TAG, "Parsing XML File Two: $timePagesTwo ms")
+        Log.d(LOG_TAG, "Total Execution XML Parsing: ${timePagesOne.plus(timePagesTwo)} ms")
+    }
+
+    private fun logExecutionData(time: Long) {
         Log.d(LOG_TAG, "Number of elements: ${counts.size}")
         Log.d(LOG_TAG, "Execution Time: $time ms")
     }
