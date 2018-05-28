@@ -34,10 +34,6 @@ class TwoThreadsWordCount {
         Log.d(LOG_TAG, "Execution Time: $time ms")
     }
 
-    private fun countWord(word: String) {
-        when(counts.containsKey(word)) {
-            true -> counts[word] = counts[word]?.plus(1)
-            false -> counts[word] = 1
-        }
-    }
+    private fun countWord(word: String) =
+        counts.merge(word, 1) { oldValue, _ -> oldValue.plus(1) }
 }
