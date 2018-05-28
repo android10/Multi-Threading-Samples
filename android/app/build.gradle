@@ -27,6 +27,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1'
 }
