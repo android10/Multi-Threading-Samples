@@ -32,12 +32,8 @@ class TwoThreadsWordCount {
                 .subscribe()
     }
 
-    private fun countWord(word: String) {
-        when(counts.containsKey(word)) {
-            true -> counts[word] = counts[word]?.plus(1)
-            false -> counts[word] = 1
-        }
-    }
+    private fun countWord(word: String) =
+            counts.merge(word, 1) { oldValue, _ -> oldValue.plus(1) }
 
     private fun logData(time: Long) {
         Log.d(LOG_TAG, "Number of elements: ${counts.size}")

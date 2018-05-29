@@ -31,19 +31,15 @@ class BetterWordCount(source: Source) {
         }
     }
 
-    private suspend fun counter(range: IntRange, file: File): HashMap<String, Int?> {
+    private fun counter(range: IntRange, file: File): HashMap<String, Int?> {
         val counts: HashMap<String, Int?> = HashMap()
         val pages = Pages(range.start, range.endInclusive, file)
         pages.forEach { page -> Words(page.text).forEach { countWord(counts, it) } }
         return counts
     }
 
-    private fun countWord(counts: HashMap<String, Int?>, word: String) {
-        when(counts.containsKey(word)) {
-            true -> counts[word] = counts[word]?.plus(1)
-            false -> counts[word] = 1
-        }
-    }
+    private fun countWord(counts: HashMap<String, Int?>, word: String) =
+            counts.merge(word, 1) { oldValue, _ -> oldValue.plus(1) }
 
     private fun logData(time: Long) {
         Log.d(LOG_TAG, "Execution Time: $time ms")
