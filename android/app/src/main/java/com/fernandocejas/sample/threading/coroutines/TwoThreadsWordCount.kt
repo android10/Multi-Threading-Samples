@@ -4,6 +4,7 @@ import android.util.Log
 import com.fernandocejas.sample.threading.data.Pages
 import com.fernandocejas.sample.threading.data.Source
 import com.fernandocejas.sample.threading.data.Words
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.newFixedThreadPoolContext
@@ -28,12 +29,12 @@ class TwoThreadsWordCount {
         }
     }
 
-    private suspend fun counterPages1() {
+    private fun counterPages1() {
         val pagesOne = Pages(0, 700, Source().wikiPagesBatchOne())
         pagesOne.forEach { page -> Words(page.text).forEach { countWord(it) } }
     }
 
-    private suspend fun counterPages2() {
+    private fun counterPages2() {
         val pagesTwo = Pages(0, 700, Source().wikiPagesBatchTwo())
         pagesTwo.forEach { page -> Words(page.text).forEach { countWord(it) } }
     }

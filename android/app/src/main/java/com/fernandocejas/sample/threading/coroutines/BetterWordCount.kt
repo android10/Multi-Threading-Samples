@@ -21,10 +21,10 @@ class BetterWordCount(source: Source) {
     fun run() {
         launch(CommonPool) {
             val time = measureTimeMillis {
-                val one = async(CommonPool) { counter(0.rangeTo(349), filePagesOne) }
-                val two = async(CommonPool) { counter(350.rangeTo(700), filePagesOne) }
-                val three = async(CommonPool) { counter(0.rangeTo(349), filePagesTwo) }
-                val four = async(CommonPool) { counter(350.rangeTo(700), filePagesTwo) }
+                val one = async(CommonPool) { counter(0.rangeTo(2000), filePagesOne) }
+                val two = async(CommonPool) { counter(2001.rangeTo(3000), filePagesOne) }
+                val three = async(CommonPool) { counter(0.rangeTo(2000), filePagesTwo) }
+                val four = async(CommonPool) { counter(2001.rangeTo(3000), filePagesTwo) }
                 mergeResults(one.await(), two.await(), three.await(), four.await())
             }
             logData(time)
