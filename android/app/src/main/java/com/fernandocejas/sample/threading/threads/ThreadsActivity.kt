@@ -11,7 +11,7 @@ class ThreadsActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_threads)
-        btnRun.setOnClickListener { coroutinesTwoThreadsWordCount() }
+        btnRun.setOnClickListener { rxJavaParallelStreamWordCount() }
     }
 
     //Threads and Locks Examples
@@ -33,6 +33,10 @@ class ThreadsActivity : Activity() {
 
     private fun rxJavaTwoThreadsWordCount() {
         com.fernandocejas.sample.threading.rxjava.TwoThreadsWordCount().run()
+    }
+
+    private fun rxJavaParallelStreamWordCount() {
+        com.fernandocejas.sample.threading.rxjava.ParallelStreamWordCount().run()
     }
     //---------------------------
 
