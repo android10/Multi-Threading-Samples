@@ -19,8 +19,7 @@ Since this is still a WIP, running these examples require a bit of manual setup:
 
 ### Do not forget to check logcat for the results
 
-License
---------
+## License
 
     Copyright 2018 Fernando Cejas
 
@@ -38,3 +37,5 @@ License
 
 
 ![http://www.fernandocejas.com](https://github.com/android10/Sample-Data/blob/master/android10/android10_logo_big.png)
+
+<a href="https://www.buymeacoffee.com/android10" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
